@@ -1,0 +1,1269 @@
+---
+- dashboard: executive_summary
+  title: Executive Summary
+  layout: newspaper
+  preferred_viewer: dashboards-next
+  description: ''
+  preferred_slug: ep1HM9WFntzcFiScIUIRgn
+  elements:
+  - title: Invoice Net Cost and Credit Amount
+    name: Invoice Net Cost and Credit Amount
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_column
+    fields: [gcp_billing_export.total_cost, gcp_billing_export.total_net_cost, gcp_billing_export__credits.total_amount,
+      gcp_billing_export.invoice_month_month]
+    filters:
+      gcp_billing_export.invoice_month_month: 12 months
+    sorts: [gcp_billing_export.invoice_month_month desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export__credits.total_amount}*-1"
+      label: Total Credited Amount
+      value_format:
+      value_format_name: usd
+      _kind_hint: measure
+      table_calculation: total_credited_amount
+      _type_hint: number
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: circle
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: true
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: gcp_billing_export.total_net_cost,
+            id: gcp_billing_export.total_net_cost, name: Total Net Cost}, {axisId: gcp_billing_export__credits.total_amount,
+            id: gcp_billing_export__credits.total_amount, name: Total Credit Amount}],
+        showLabels: true, showValues: true, valueFormat: '[>=1000000]$0.00,,"M";$0.00,"K"',
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    x_axis_zoom: true
+    y_axis_zoom: true
+    label_value_format: '[>=1000000]$0.0,,"M";$0,"K"'
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export__credits.total_amount, gcp_billing_export.total_net_cost]
+    listen:
+      Service Name: billing_lookup.service_name
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Application Name: applications.name
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Usage Start Date: gcp_billing_export.usage_start_date
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 1
+    col: 6
+    width: 18
+    height: 8
+  - title: New Tile
+    name: New Tile
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: single_value
+    fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_year]
+    filters:
+      gcp_billing_export.usage_start_date: 2 years
+    sorts: [gcp_billing_export.invoice_month_year desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}/offset(${gcp_billing_export.total_net_cost},1)-1"
+      label: Change
+      value_format:
+      value_format_name: percent_1
+      _kind_hint: measure
+      table_calculation: change
+      _type_hint: number
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
+    show_comparison_label: false
+    enable_conditional_formatting: true
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    color_application:
+      collection_id: google
+      palette_id: google-categorical-0
+    custom_color: "#FFF"
+    single_value_title: YTD Costs
+    value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    comparison_label: YTD Costs
+    conditional_formatting: [{type: not equal to, value: -999, background_color: '',
+        font_color: "#34A853", color_application: {collection_id: google, palette_id: google-diverging-0},
+        bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Service Name: billing_lookup.service_name
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Application Name: applications.name
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 1
+    col: 0
+    width: 6
+    height: 2
+  - title: New Tile
+    name: New Tile (2)
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: single_value
+    fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_quarter]
+    filters:
+      gcp_billing_export.usage_start_date: 2 quarters
+    sorts: [gcp_billing_export.invoice_month_quarter desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}/offset(${gcp_billing_export.total_net_cost},1)-1"
+      label: Change
+      value_format:
+      value_format_name: percent_1
+      _kind_hint: measure
+      table_calculation: change
+      _type_hint: number
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
+    show_comparison_label: false
+    enable_conditional_formatting: true
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    color_application:
+      collection_id: google
+      palette_id: google-categorical-0
+    custom_color: "#FFF"
+    single_value_title: QTD Costs
+    value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    comparison_label: YTD Costs
+    conditional_formatting: [{type: not equal to, value: -999, background_color: '',
+        font_color: "#34A853", color_application: {collection_id: google, palette_id: google-diverging-0},
+        bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Service Name: billing_lookup.service_name
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Application Name: applications.name
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 3
+    col: 0
+    width: 6
+    height: 2
+  - title: New Tile
+    name: New Tile (3)
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: single_value
+    fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_month]
+    fill_fields: [gcp_billing_export.invoice_month_month]
+    filters:
+      gcp_billing_export.usage_start_date: 2 months
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}/offset(${gcp_billing_export.total_net_cost},1)-1"
+      label: Change
+      value_format:
+      value_format_name: percent_1
+      _kind_hint: measure
+      table_calculation: change
+      _type_hint: number
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
+    show_comparison_label: false
+    enable_conditional_formatting: true
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    color_application:
+      collection_id: google
+      palette_id: google-categorical-0
+    custom_color: "#FFF"
+    single_value_title: MTD Costs
+    value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    comparison_label: YTD Costs
+    conditional_formatting: [{type: not equal to, value: -999, background_color: '',
+        font_color: "#34A853", color_application: {collection_id: google, palette_id: google-diverging-0},
+        bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Service Name: billing_lookup.service_name
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Application Name: applications.name
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 5
+    col: 0
+    width: 6
+    height: 2
+  - title: New Tile
+    name: New Tile (4)
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: single_value
+    fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_month]
+    fill_fields: [gcp_billing_export.invoice_month_month]
+    filters:
+      gcp_billing_export.usage_start_date: 2 weeks
+    sorts: [gcp_billing_export.invoice_month_month desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}/offset(${gcp_billing_export.total_net_cost},1)-1"
+      label: Change
+      value_format:
+      value_format_name: percent_1
+      _kind_hint: measure
+      table_calculation: change
+      _type_hint: number
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: true
+    show_comparison_label: false
+    enable_conditional_formatting: true
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    color_application:
+      collection_id: google
+      palette_id: google-categorical-0
+    custom_color: "#FFF"
+    single_value_title: WTD Costs
+    value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    comparison_label: YTD Costs
+    conditional_formatting: [{type: not equal to, value: -999, background_color: '',
+        font_color: "#34A853", color_application: {collection_id: google, palette_id: google-diverging-0},
+        bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Service Name: billing_lookup.service_name
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Application Name: applications.name
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 7
+    col: 0
+    width: 6
+    height: 2
+  - title: Monthly Support Cost Amount
+    name: Monthly Support Cost Amount
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_grid
+    fields: [gcp_billing_export.total_cost, gcp_billing_export.total_net_cost, gcp_billing_export__credits.total_amount,
+      gcp_billing_export.invoice_month_month]
+    filters:
+      gcp_billing_export.invoice_month_month: 1 years
+      gcp_billing_export.service__description: Support
+    sorts: [gcp_billing_export.invoice_month_month desc]
+    limit: 500
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: center
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    truncate_header: false
+    series_cell_visualizations:
+      gcp_billing_export.total_net_cost:
+        is_active: false
+    series_text_format:
+      gcp_billing_export.total_net_cost:
+        align: center
+      gcp_billing_export__credits.total_amount:
+        align: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    legend_position: center
+    point_style: circle
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: true
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: gcp_billing_export.total_net_cost,
+            id: gcp_billing_export.total_net_cost, name: Total Net Cost}, {axisId: gcp_billing_export__credits.total_amount,
+            id: gcp_billing_export__credits.total_amount, name: Total Credit Amount}],
+        showLabels: true, showValues: true, valueFormat: '[>=1000000]$0.00,,"M";$0.00,"K"',
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    label_value_format: '[>=1000000]$0.00,,"M";$0.00,"K"'
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export.total_cost]
+    show_null_points: true
+    interpolation: linear
+    listen:
+      Service Name: billing_lookup.service_name
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Application Name: applications.name
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Usage Start Date: gcp_billing_export.usage_start_date
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 9
+    col: 0
+    width: 8
+    height: 6
+  - type: button
+    name: button_656
+    rich_content_json: '{"text":"User Guide","description":"User Guide","newTab":true,"alignment":"right","size":"small","style":"FILLED","color":"#5A6874","href":"https://docs.google.com/document/d/1LqB3XHoCSCkIqIm4qyMLmCMetl3bSzTHZZTJC3Nuv1Y/edit?usp=share_link"}'
+    row: 0
+    col: 0
+    width: 24
+    height: 1
+  - title: MoM Invoice Amount
+    name: MoM Invoice Amount
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_grid
+    fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_month]
+    filters:
+      gcp_billing_export.invoice_month_month: 10 months ago for 10 months
+      billing_lookup.service_name: ''
+      applications.name: ''
+    sorts: [gcp_billing_export.invoice_month_month desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}/offset(${gcp_billing_export.total_net_cost},1)"
+      label: Percent of Previous
+      value_format:
+      value_format_name: percent_0
+      _kind_hint: measure
+      table_calculation: percent_of_previous
+      _type_hint: number
+      id: i6FdvSbYid
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}-(offset(${gcp_billing_export.total_net_cost},1))"
+      label: 'Delta From Previous Month '
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: delta_from_previous_month
+      _type_hint: number
+      id: sep7RiIQ4F
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}"
+      label: Net Cost
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: net_cost
+      _type_hint: number
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: center
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    truncate_header: false
+    series_column_widths:
+      gcp_billing_export.total_net_cost: 413
+    series_cell_visualizations:
+      gcp_billing_export.total_net_cost:
+        is_active: false
+    series_text_format:
+      gcp_billing_export.total_net_cost:
+        align: center
+    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: "#112B4A",
+        font_color: !!null '', color_application: {collection_id: cme-colors, custom: {
+            id: f2b121b9-7f83-ad9e-ab1b-de4c7f321957, label: Custom, type: continuous,
+            stops: [{color: "#47ff89", offset: 0}, {color: "#fffc45", offset: 50},
+              {color: "#ff4523", offset: 100}]}, options: {steps: 5, constraints: {
+              min: {type: minimum}, mid: {type: number, value: 0}, max: {type: maximum}},
+            mirror: true, reverse: false, stepped: false}}, bold: false, italic: false,
+        strikethrough: false, fields: [delta_from_previous_month]}]
+    series_value_format:
+      gcp_billing_export.total_net_cost:
+        name: usd_0
+        decimals: '0'
+        format_string: "$#,##0"
+        label: U.S. Dollars (0)
+        label_prefix: U.S. Dollars
+    arm_length: 25
+    arm_weight: 50
+    spinner_length: 100
+    spinner_weight: 50
+    angle: 90
+    cutout: 50
+    range_x: 1
+    range_y: 1
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    y_axes: [{label: '', orientation: left, series: [{axisId: gcp_billing_export.total_net_cost,
+            id: gcp_billing_export.total_net_cost, name: Total Net Cost}], showLabels: true,
+        showValues: true, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}, {label: !!null '', orientation: right, series: [{axisId: new_calculation,
+            id: new_calculation, name: New Calculation}], showLabels: true, showValues: true,
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    legend_position: center
+    font_size: 12
+    point_style: circle
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: true
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export.total_net_cost]
+    show_null_points: true
+    interpolation: linear
+    value_labels: legend
+    label_type: labPer
+    map_plot_mode: points
+    heatmap_gridlines: false
+    heatmap_gridlines_empty: false
+    heatmap_opacity: 0.5
+    show_region_field: true
+    draw_map_labels_above_data: true
+    map_tile_provider: light
+    map_position: fit_data
+    map_scale_indicator: 'off'
+    map_pannable: true
+    map_zoomable: true
+    map_marker_type: circle
+    map_marker_icon_name: default
+    map_marker_radius_mode: proportional_value
+    map_marker_units: meters
+    map_marker_proportional_scale_type: linear
+    map_marker_color_mode: fixed
+    show_legend: true
+    quantize_map_value_colors: false
+    reverse_map_value_colors: false
+    hidden_points_if_no: []
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    up_color: false
+    down_color: false
+    total_color: false
+    leftAxisLabelVisible: false
+    leftAxisLabel: ''
+    rightAxisLabelVisible: false
+    rightAxisLabel: ''
+    smoothedBars: false
+    orientation: automatic
+    labelPosition: left
+    percentType: total
+    percentPosition: inline
+    valuePosition: right
+    labelColorEnabled: false
+    labelColor: "#FFF"
+    column_order: ["$$$_row_numbers_$$$", gcp_billing_export.invoice_month_month,
+      net_cost, delta_from_previous_month, percent_of_previous]
+    listen:
+      Location Region: gcp_billing_export.location__region
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Usage Start Date: gcp_billing_export.usage_start_date
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 15
+    col: 0
+    width: 8
+    height: 6
+  - title: New Quarterly Invoice Amount for Exec Summary
+    name: New Quarterly Invoice Amount for Exec Summary
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_column
+    fields: [gcp_billing_export.total_cost, gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_quarter,
+      marketplace]
+    pivots: [marketplace]
+    fill_fields: [gcp_billing_export.invoice_month_quarter]
+    filters:
+      gcp_billing_export.invoice_month_quarter: 8 quarters ago for 8 quarters
+      billing_lookup.service_name: ''
+      applications.name: ''
+      marketplace: ''
+    sorts: [marketplace, gcp_billing_export.invoice_month_quarter desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: dimension
+      expression: if(${pricing_mapping.marketplace_purchase}=yes,"Marketplace","Consumption")
+      label: Marketplace Indicator New
+      value_format:
+      value_format_name:
+      dimension: marketplace_indicator_new
+      _kind_hint: dimension
+      _type_hint: string
+    - category: dimension
+      description: ''
+      label: Marketplace
+      value_format:
+      value_format_name:
+      calculation_type: group_by
+      dimension: marketplace
+      args:
+      - pricing_mapping.marketplace_purchase
+      - - label: Marketplace
+          filter: 'Yes'
+          __FILE: finops/dashboards/executive_summary.dashboard.lookml
+          __LINE_NUM: 723
+      - Consumption
+      _kind_hint: dimension
+      _type_hint: string
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: circle
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: true
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: gcp_billing_export.total_net_cost,
+            id: gcp_billing_export.total_net_cost, name: Total Net Cost}, {axisId: gcp_billing_export__credits.total_amount,
+            id: gcp_billing_export__credits.total_amount, name: Total Credit Amount}],
+        showLabels: true, showValues: true, valueFormat: '[>=1000000]$0.00,,"M";$0.00,"K"',
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    x_axis_zoom: true
+    y_axis_zoom: true
+    label_value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    reference_lines: []
+    trend_lines: []
+    show_null_points: true
+    interpolation: linear
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export.total_cost]
+    hidden_pivots: {}
+    listen:
+      Location Region: gcp_billing_export.location__region
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Usage Start Date: gcp_billing_export.usage_start_date
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 9
+    col: 8
+    width: 16
+    height: 8
+  - name: Partner Spend
+    title: Partner Spend
+    merged_queries:
+    - model: gcp_billing
+      explore: partner_and_commit_spend
+      type: table
+      fields: [partner_and_commit_spend.month_month, partner_and_commit_spend.total_forecast,
+        partner_and_commit_spend.partner_spend, partner_and_commit_spend.marketplace_forecast_running_total,
+        partner_and_commit_spend.partner_forecast_running_total]
+      fill_fields: [partner_and_commit_spend.month_month]
+      filters:
+        partner_and_commit_spend.month_quarter: 2021/11/01 to 2024/10/31
+      sorts: [partner_and_commit_spend.month_month]
+      limit: 500
+      column_limit: 50
+      join_fields: []
+    - model: gcp_billing
+      explore: gcp_billing_export
+      type: table
+      fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_month]
+      fill_fields: [gcp_billing_export.invoice_month_month]
+      filters:
+        gcp_billing_export.sku__id: "-A1A2-4711-B376"
+      sorts: [gcp_billing_export.invoice_month_month desc]
+      limit: 500
+      column_limit: 50
+      join_fields:
+      - field_name: gcp_billing_export.invoice_month_month
+        source_field_name: partner_and_commit_spend.month_month
+    color_application:
+      collection_id: 7c56cc21-66e4-41c9-81ce-a60e1c3967b2
+      palette_id: 5d189dfc-4f46-46f3-822b-bfb0b61777b1
+      options:
+        steps: 5
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    x_axis_zoom: true
+    y_axis_zoom: true
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    hidden_series: []
+    legend_position: center
+    label_value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    series_types: {}
+    point_style: none
+    series_colors: {}
+    series_labels:
+      partner_and_commit_spend.partner_spend: Total Partner Spend
+      running_total_of_billing_total_net_cost: Total GCP Invoice
+      running_total_net_cost: Total Net Cost
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    reference_lines: [{reference_type: line, range_start: max, range_end: min, margin_top: deviation,
+        margin_value: mean, margin_bottom: deviation, label_position: center, color: "#000000",
+        line_value: '100000000', label: "$100M Commit"}]
+    trend_lines: []
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    show_null_points: true
+    interpolation: linear
+    type: looker_column
+    hidden_pivots: {}
+    hidden_fields: [gcp_billing_export.total_net_cost, partner_and_commit_spend.total_forecast,
+      total_before_current_month]
+    sorts: [partner_and_commit_spend.month_month]
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: |+
+        if(add_months(1,${partner_and_commit_spend.month_month})< now(),${gcp_billing_export.total_net_cost}, 0)
+
+
+      label: Total Before Current Month
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_before_current_month
+      _type_hint: number
+    - category: table_calculation
+      expression: running_total(${total_before_current_month})
+      label: Running Total Net Cost
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: running_total_net_cost
+      _type_hint: number
+    - category: table_calculation
+      expression: "${partner_and_commit_spend.total_forecast}*1"
+      label: Consumption Forecast
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: consumption_forecast
+      _type_hint: number
+    listen:
+    -
+    - Usage Start Date: gcp_billing_export.usage_start_date
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 17
+    col: 8
+    width: 16
+    height: 9
+  - name: New Tile (5)
+    title: New Tile
+    title_hidden: true
+    merged_queries:
+    - model: gcp_billing
+      explore: gcp_billing_export
+      type: table
+      fields: [gcp_billing_export.billing_account_id, gcp_billing_export.total_cost,
+        gcp_billing_export.total_net_cost, gcp_billing_export.total_marketplace_cost,
+        gcp_billing_export__credits.total_amount]
+      filters:
+        gcp_billing_export.billing_account_id: "-NULL"
+        gcp_billing_export.usage_start_date: ''
+      sorts: [gcp_billing_export.total_cost desc 0]
+      limit: 500
+      column_limit: 50
+      query_timezone: America/Chicago
+    - model: gcp_billing
+      explore: partner_and_commit_spend
+      type: table
+      fields: [partner_and_commit_spend.partner_spend]
+      limit: 500
+      query_timezone: America/Chicago
+      join_fields: []
+    type: looker_single_record
+    hidden_pivots: {}
+    hidden_fields: [gcp_billing_export.total_cost, gcp_billing_export.total_net_cost,
+      gcp_billing_export__credits.total_amount, partner_and_commit_spend.partner_spend,
+      gcp_billing_export.total_marketplace_cost]
+    dynamic_fields:
+    - category: table_calculation
+      expression: "(${gcp_billing_export.total_cost})"
+      label: Gross Cost (before credits, includes marketplace)
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: gross_cost_before_credits_includes_marketplace
+      _type_hint: number
+    - category: table_calculation
+      expression: "(${gcp_billing_export__credits.total_amount})*-1"
+      label: 'Less: Credits and Discounts'
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: less_credits_and_discounts
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_net_cost}"
+      label: Net Cost (amount on the bill)
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: net_cost_amount_on_the_bill
+      _type_hint: number
+    - category: table_calculation
+      expression: "${partner_and_commit_spend.partner_spend}"
+      label: 'Plus: Partner Spend (i.e. Apigee, Chronicle)'
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: plus_partner_spend_ie_apigee_chronicle
+      _type_hint: number
+    - category: table_calculation
+      expression: "${net_cost_amount_on_the_bill}+${plus_partner_spend_ie_apigee_chronicle}"
+      label: Net All GCP Services
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: net_all_gcp_services
+      _type_hint: number
+    - category: table_calculation
+      expression: "(${gcp_billing_export.total_marketplace_cost})*-1"
+      label: 'Less: Marketplace Purchases'
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: less_marketplace_purchases
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gross_cost_before_credits_includes_marketplace}-${gcp_billing_export__credits.total_amount}+${partner_and_commit_spend.partner_spend}-${gcp_billing_export.total_marketplace_cost}"
+      label: Net GCP Consumption and Services
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: net_gcp_consumption_and_services
+      _type_hint: number
+    listen:
+    - Usage Start Date: gcp_billing_export.usage_start_date
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+    -
+    row: 21
+    col: 0
+    width: 8
+    height: 5
+  - name: Partner Spend (Copy)
+    title: Partner Spend (Copy)
+    merged_queries:
+    - model: gcp_billing
+      explore: partner_and_commit_spend
+      type: table
+      fields: [partner_and_commit_spend.month_month, partner_and_commit_spend.total_forecast,
+        partner_and_commit_spend.partner_spend, partner_and_commit_spend.marketplace_forecast_running_total,
+        partner_and_commit_spend.partner_forecast_running_total]
+      fill_fields: [partner_and_commit_spend.month_month]
+      filters:
+        partner_and_commit_spend.month_quarter: 2021/11/01 to 2024/10/31
+      sorts: [partner_and_commit_spend.month_month]
+      limit: 500
+      column_limit: 50
+      join_fields: []
+    - model: gcp_billing
+      explore: gcp_billing_export
+      type: table
+      fields: [gcp_billing_export.total_net_cost, gcp_billing_export.invoice_month_month]
+      fill_fields: [gcp_billing_export.invoice_month_month]
+      filters:
+        gcp_billing_export.sku__id: "-A1A2-4711-B376"
+      sorts: [gcp_billing_export.invoice_month_month desc]
+      limit: 500
+      column_limit: 50
+      join_fields:
+      - field_name: gcp_billing_export.invoice_month_month
+        source_field_name: partner_and_commit_spend.month_month
+    color_application:
+      collection_id: 7c56cc21-66e4-41c9-81ce-a60e1c3967b2
+      palette_id: 5d189dfc-4f46-46f3-822b-bfb0b61777b1
+      options:
+        steps: 5
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    truncate_header: false
+    size_to_fit: true
+    minimum_column_width: 75
+    series_labels:
+      partner_and_commit_spend.partner_spend: Total Partner Spend
+      running_total_of_billing_total_net_cost: Total GCP Invoice
+      running_total_net_cost: Total Net Cost
+    series_cell_visualizations:
+      partner_and_commit_spend.partner_spend:
+        is_active: false
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    x_axis_zoom: true
+    y_axis_zoom: true
+    trellis: ''
+    stacking: normal
+    hidden_series: []
+    legend_position: center
+    label_value_format: '[>=1000000]$0.0,,"M";$0.0,"K"'
+    series_types: {}
+    point_style: none
+    series_colors: {}
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    reference_lines: [{reference_type: line, range_start: max, range_end: min, margin_top: deviation,
+        margin_value: mean, margin_bottom: deviation, label_position: center, color: "#000000",
+        line_value: '100000000', label: "$100M Commit"}]
+    trend_lines: []
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    show_null_points: true
+    interpolation: linear
+    type: looker_grid
+    hidden_pivots: {}
+    hidden_fields: [gcp_billing_export.total_net_cost, partner_and_commit_spend.total_forecast,
+      total_before_current_month]
+    sorts: [partner_and_commit_spend.month_month]
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: |+
+        if(add_months(1,${partner_and_commit_spend.month_month})< now(),${gcp_billing_export.total_net_cost}, 0)
+
+
+      label: Total Before Current Month
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_before_current_month
+      _type_hint: number
+    - category: table_calculation
+      expression: running_total(${total_before_current_month})
+      label: Running Total Net Cost
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: running_total_net_cost
+      _type_hint: number
+    - category: table_calculation
+      expression: "${partner_and_commit_spend.total_forecast}*1"
+      label: Consumption Forecast
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: consumption_forecast
+      _type_hint: number
+    listen:
+    -
+    - Usage Start Date: gcp_billing_export.usage_start_date
+      App ID (Resource): gcp_billing_export.app_id_with_unallocated
+      Project Name: gcp_billing_export.project__name
+      Environment: gcp_billing_export.environment
+      Location Region: gcp_billing_export.location__region
+      Project ID (PMGT - new): gcp_billing_export.cme_project_id
+      Is Marketplace Purchase? (Yes / No): pricing_mapping.marketplace_purchase
+    row: 26
+    col: 0
+    width: 16
+    height: 9
+  filters:
+  - name: Usage Start Date
+    title: Usage Start Date
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.usage_start_date
+  - name: App ID (Resource)
+    title: App ID (Resource)
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.app_id_with_unallocated
+  - name: Application Name
+    title: Application Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: applications.name
+  - name: Service Name
+    title: Service Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: billing_lookup.service_name
+  - name: Project Name
+    title: Project Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.project__name
+  - name: Environment
+    title: Environment
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.environment
+  - name: Location Region
+    title: Location Region
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.location__region
+  - name: Project ID (PMGT - new)
+    title: Project ID (PMGT - new)
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.cme_project_id
+  - name: Is Marketplace Purchase? (Yes / No)
+    title: Is Marketplace Purchase? (Yes / No)
+    type: field_filter
+    default_value: Yes,No
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: checkboxes
+      display: inline
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: pricing_mapping.marketplace_purchase
