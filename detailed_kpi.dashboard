@@ -1,0 +1,766 @@
+---
+- dashboard: detailed_kpi_breakdown
+  title: Detailed KPI Breakdown
+  layout: newspaper
+  preferred_viewer: dashboards-next
+  description: ''
+  preferred_slug: wLYx11Ktuvql2AS1gLxgTi
+  elements:
+  - title: Compute Engine CUD Cost Breakdown
+    name: Compute Engine CUD Cost Breakdown
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_column
+    fields: [gcp_billing_export.usage_start_month, gcp_billing_export.total_non_cud_cost,
+      gcp_billing_export.total_cost, gcp_billing_export__credits.total_committed_use_discount,
+      gcp_billing_export.total_net_cost, gcp_billing_export.total_cud_cost]
+    fill_fields: [gcp_billing_export.usage_start_month]
+    filters:
+      gcp_billing_export.service__description: Compute Engine
+      gcp_billing_export__credits.type: "-Discount"
+      gcp_billing_export.usage_start_month: 6 months
+    sorts: [gcp_billing_export.usage_start_month desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export__credits.total_committed_use_discount}*-1"
+      label: 'CUD Amount '
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: cud_amount
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_cud_cost}*-1"
+      label: Total CUD Purchase Amount
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_cud_purchase_amount
+      _type_hint: number
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: cme-group-secondary
+      palette_id: cme-group-secondary-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    x_axis_zoom: true
+    y_axis_zoom: true
+    hidden_series: []
+    label_value_format: "$###,##0"
+    series_labels:
+      gcp_billing_export.total_non_cud_cost: On Demand Spend
+    show_null_points: true
+    interpolation: linear
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export__credits.total_committed_use_discount, gcp_billing_export.total_net_cost,
+      total_cud_purchase_amount, gcp_billing_export.total_cost]
+    hidden_pivots: {}
+    note_state: expanded
+    note_display: above
+    note_text: "This graph breaks down the total resource and spend based committed\
+      \ use discount metrics. Cores, RAM, and Networking SKUs are included in the\
+      \ total cost. The top value in gray is the total invoice cost for all Compute\
+      \ Engine resources by month. The light blue value is the total cost to purchase\
+      \ the CUD and the dark grey negative value is the amount of savings received\
+      \ by the purchasing the CUD amount in light blue. Finally, the darkest blue\
+      \ color is the total amount of On Demand spend for Compute Engine resources.\
+      \ \n"
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 0
+    col: 0
+    width: 24
+    height: 11
+  - title: 'Average Usage Cost per Core Hour '
+    name: 'Average Usage Cost per Core Hour '
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_line
+    fields: [sum_of_usage_amount_in_pricing_units, gcp_billing_export.usage_start_month,
+      gcp_billing_export.usage__amount_in_calculated_units, gcp_billing_export.total_net_cost]
+    fill_fields: [gcp_billing_export.usage_start_month]
+    filters:
+      gcp_billing_export.service__description: Compute Engine
+      gcp_billing_export__credits.type: "-Discount"
+      gcp_billing_export.usage_start_month: 6 months ago for 6 months
+    sorts: [gcp_billing_export.usage_start_month desc]
+    limit: 500
+    column_limit: 50
+    total: true
+    dynamic_fields:
+    - category: table_calculation
+      expression: "(${gcp_billing_export.total_net_cost}/${sum_of_usage_amount_in_pricing_units})*24"
+      label: Cost Per Core
+      value_format:
+      value_format_name: usd
+      _kind_hint: measure
+      table_calculation: cost_per_core
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gcp_billing_export__credits.total_committed_use_discount}*-1"
+      label: 'CUD Amount '
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: cud_amount
+      _type_hint: number
+      is_disabled: true
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_cud_cost}*-1"
+      label: Total CUD Purchase Amount
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_cud_purchase_amount
+      _type_hint: number
+      is_disabled: true
+    - category: measure
+      expression: ''
+      label: Sum of Usage Amount In Pricing Units
+      value_format:
+      value_format_name: decimal_0
+      based_on: gcp_billing_export.usage__amount_in_pricing_units
+      _kind_hint: measure
+      measure: sum_of_usage_amount_in_pricing_units
+      type: sum
+      _type_hint: number
+    filter_expression: 'contains(${pricing.pricing_type},"Cores") OR contains(${gcp_billing_export.sku__description},
+      "Commitment - dollar based v1: GCE for") OR contains(${gcp_billing_export.sku__description},
+      "Compute-optimized Sole Tenancy Instance Core running in Americas")
+
+      '
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: true
+    interpolation: linear
+    color_application:
+      collection_id: cme-group-secondary
+      palette_id: cme-group-secondary-categorical-0
+      options:
+        steps: 5
+    y_axes: [{label: '', orientation: left, series: [{axisId: cost_per_core, id: cost_per_core,
+            name: Cost Per Core}], showLabels: true, showValues: true, unpinAxis: false,
+        tickDensity: default, tickDensityCustom: 5, type: linear}, {label: Core Hours,
+        orientation: right, series: [{axisId: gcp_billing_export.usage__amount_in_calculated_units,
+            id: gcp_billing_export.usage__amount_in_calculated_units, name: Cores}],
+        showLabels: true, showValues: true, unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}]
+    x_axis_zoom: true
+    y_axis_zoom: true
+    hidden_series: []
+    label_value_format: ''
+    series_types:
+      gcp_billing_export.usage__amount_in_calculated_units: column
+    series_labels:
+      gcp_billing_export.usage__amount_in_calculated_units: Core Hours
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [sum_of_usage_amount_in_pricing_units, gcp_billing_export.total_net_cost]
+    hidden_pivots: {}
+    note_state: expanded
+    note_display: above
+    note_text: 'This graph breaks down the average cost per core for compute engine
+      resources. This metric takes the total usage amount divided by the total net
+      cost. All SKUs are included in this calculation, not just CUD eligible SKUs.  This
+      graph takes CUDs into consideration in order to drive down the average core
+      costs. '
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 11
+    col: 12
+    width: 12
+    height: 8
+  - title: Average Cost per Terabyte Breakout by Resource Type
+    name: Average Cost per Terabyte Breakout by Resource Type
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_grid
+    fields: [gcp_billing_export.usage_start_month, gcp_billing_export.usage__amount_in_calculated_units,
+      gcp_billing_export.total_net_cost, pricing.pricing_type]
+    pivots: [pricing.pricing_type]
+    filters:
+      gcp_billing_export.service__description: Cloud Storage
+      gcp_billing_export.usage_start_month: 6 months
+      gcp_billing_export.usage__calculated_unit: gibibyte month
+      gcp_billing_export.sku__description: "%Storage%"
+      gcp_billing_export.usage__amount_in_calculated_units: ">0"
+      gcp_billing_export.total_net_cost: ">1"
+    sorts: [pricing.pricing_type, gcp_billing_export.usage_start_month desc 0]
+    limit: 500
+    column_limit: 50
+    total: true
+    dynamic_fields:
+    - category: table_calculation
+      expression: "(${gcp_billing_export.total_net_cost}*1000)/(${gcp_billing_export.usage__amount_in_calculated_units}*1.07374)"
+      label: Average Monthly Cost per Terabyte
+      value_format:
+      value_format_name: usd
+      _kind_hint: measure
+      table_calculation: average_monthly_cost_per_terabyte
+      _type_hint: number
+    - args:
+      - average_monthly_cost_per_terabyte
+      calculation_type: percent_difference_from_previous
+      category: table_calculation
+      based_on: average_monthly_cost_per_terabyte
+      label: Percent change from previous -  Average Monthly Cost per Terabyte
+      source_field: average_monthly_cost_per_terabyte
+      table_calculation: percent_change_from_previous_average_monthly_cost_per_terabyte
+      value_format:
+      value_format_name: percent_0
+      _kind_hint: measure
+      _type_hint: number
+      is_disabled: true
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    color_application:
+      collection_id: cme-group-secondary
+      palette_id: cme-group-secondary-categorical-0
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    truncate_header: false
+    minimum_column_width: 75
+    series_column_widths:
+      gcp_billing_export.usage_start_month: 284.3599999999999
+    series_cell_visualizations:
+      gcp_billing_export.total_net_cost:
+        is_active: true
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    y_axes: [{label: '', orientation: left, series: [{axisId: gcp_billing_export.total_net_cost,
+            id: gcp_billing_export.total_net_cost, name: Total Net Cost}], showLabels: true,
+        showValues: true, maxValue: !!null '', unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}, {label: !!null '', orientation: right,
+        series: [{axisId: average_monthly_cost_per_terabyte, id: average_monthly_cost_per_terabyte,
+            name: Average Monthly Cost per Terabyte}], showLabels: true, showValues: true,
+        maxValue: 25, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    x_axis_zoom: true
+    y_axis_zoom: true
+    trellis: ''
+    stacking: normal
+    hidden_series: []
+    legend_position: center
+    point_style: circle_outline
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    hidden_pivots: {}
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export.usage__amount_in_calculated_units]
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 36
+    col: 0
+    width: 24
+    height: 6
+  - title: At Rest Cloud Storage Cost
+    name: At Rest Cloud Storage Cost
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_column
+    fields: [gcp_billing_export.usage_start_month, gcp_billing_export.usage__amount_in_calculated_units,
+      gcp_billing_export.total_net_cost]
+    fill_fields: [gcp_billing_export.usage_start_month]
+    filters:
+      gcp_billing_export.service__description: Cloud Storage
+      gcp_billing_export.usage_start_month: 4 months
+      gcp_billing_export.usage__calculated_unit: gibibyte month
+      gcp_billing_export.sku__description: "%Storage%"
+    sorts: [gcp_billing_export.usage_start_month, gcp_billing_export.usage__amount_in_calculated_units
+        desc]
+    limit: 500
+    column_limit: 50
+    total: true
+    dynamic_fields:
+    - category: table_calculation
+      expression: " ${gcp_billing_export.total_net_cost}*1"
+      label: Total Net Cost
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_net_cost
+      _type_hint: number
+    - category: table_calculation
+      expression: "(${gcp_billing_export.total_net_cost}*1000)/(${gcp_billing_export.usage__amount_in_calculated_units}*1.07374)"
+      label: Average Monthly Cost per Terabyte
+      value_format:
+      value_format_name: usd
+      _kind_hint: measure
+      table_calculation: average_monthly_cost_per_terabyte
+      _type_hint: number
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: circle_outline
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: total_net_cost, id: total_net_cost,
+            name: Total Net Cost}], showLabels: true, showValues: true, unpinAxis: false,
+        tickDensity: default, type: linear}, {label: !!null '', orientation: right,
+        series: [{axisId: average_monthly_cost_per_terabyte, id: average_monthly_cost_per_terabyte,
+            name: Average Monthly Cost per Terabyte}], showLabels: true, showValues: true,
+        maxValue: 25, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    x_axis_zoom: true
+    y_axis_zoom: false
+    limit_displayed_rows_values:
+      show_hide: hide
+      first_last: first
+      num_rows: 0
+    hidden_series: []
+    label_value_format: ''
+    series_types:
+      average_monthly_cost_per_terabyte: line
+    reference_lines: []
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    truncate_header: false
+    size_to_fit: true
+    series_cell_visualizations:
+      gcp_billing_export.total_net_cost:
+        is_active: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    hidden_pivots: {}
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export.usage__amount_in_calculated_units, gcp_billing_export.total_net_cost]
+    hide_totals: false
+    hide_row_totals: false
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 27
+    col: 0
+    width: 14
+    height: 9
+  - title: 'Average Usage Cost per Core by Machine Type '
+    name: 'Average Usage Cost per Core by Machine Type '
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_line
+    fields: [gcp_billing_export.total_non_cud_cost, gcp_billing_export.total_cost,
+      gcp_billing_export__credits.total_committed_use_discount, gcp_billing_export.total_net_cost,
+      gcp_billing_export.total_cud_cost, sum_of_usage_amount_in_pricing_units, gcp_billing_export.usage_start_month,
+      gcp_billing_export.machine_type]
+    pivots: [gcp_billing_export.machine_type]
+    fill_fields: [gcp_billing_export.usage_start_month]
+    filters:
+      gcp_billing_export.service__description: Compute Engine
+      gcp_billing_export__credits.type: "-Discount"
+      gcp_billing_export.usage_start_month: 6 months
+    sorts: [gcp_billing_export.machine_type, gcp_billing_export.total_non_cud_cost
+        desc 0]
+    limit: 500
+    column_limit: 50
+    total: true
+    dynamic_fields:
+    - category: table_calculation
+      expression: "(${gcp_billing_export.total_net_cost}/${sum_of_usage_amount_in_pricing_units})*24"
+      label: Cost Per Core
+      value_format:
+      value_format_name: usd
+      _kind_hint: measure
+      table_calculation: cost_per_core
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gcp_billing_export__credits.total_committed_use_discount}*-1"
+      label: 'CUD Amount '
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: cud_amount
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_cud_cost}*-1"
+      label: Total CUD Purchase Amount
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_cud_purchase_amount
+      _type_hint: number
+    - category: measure
+      expression: ''
+      label: Sum of Usage Amount In Pricing Units
+      value_format:
+      value_format_name: decimal_0
+      based_on: gcp_billing_export.usage__amount_in_pricing_units
+      _kind_hint: measure
+      measure: sum_of_usage_amount_in_pricing_units
+      type: sum
+      _type_hint: number
+    filter_expression: 'contains(${pricing.pricing_type},"Cores") OR contains(${gcp_billing_export.sku__description},
+      "Commitment - dollar based v1: GCE for") OR contains(${gcp_billing_export.sku__description},
+      "Compute-optimized Sole Tenancy Instance Core running in Americas")
+
+      '
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: true
+    interpolation: linear
+    color_application:
+      collection_id: cme-group-secondary
+      palette_id: cme-group-secondary-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    x_axis_zoom: true
+    y_axis_zoom: true
+    hidden_series: []
+    label_value_format: "$##.00"
+    series_labels:
+      gcp_billing_export.total_non_cud_cost: On Demand Spend
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export__credits.total_committed_use_discount, gcp_billing_export.total_net_cost,
+      total_cud_purchase_amount, gcp_billing_export.total_cost, sum_of_usage_amount_in_pricing_units,
+      cud_amount, gcp_billing_export.total_cud_cost, gcp_billing_export.total_non_cud_cost]
+    hidden_pivots: {}
+    note_state: expanded
+    note_display: above
+    note_text: 'C3 Machine Type Grouping does not have any CUD discount applied, rather
+      a discount credit is applied at the end of each month. '
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 19
+    col: 0
+    width: 24
+    height: 8
+  - title: Cloud Storage Data Retrieval Costs
+    name: Cloud Storage Data Retrieval Costs
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_column
+    fields: [pricing.pricing_type, gcp_billing_export.usage_start_month, gcp_billing_export.total_cost]
+    pivots: [pricing.pricing_type]
+    fill_fields: [gcp_billing_export.usage_start_month]
+    filters:
+      gcp_billing_export.service__description: Cloud Storage
+      pricing.pricing_category: Data Retrieval,Early Deletes
+      gcp_billing_export.project__id: ''
+      gcp_billing_export.app_id_with_unallocated: ''
+      applications.name: ''
+      gcp_billing_export.usage_start_date: 6 months
+    sorts: [pricing.pricing_type, gcp_billing_export.usage_start_month, gcp_billing_export.total_cost
+        desc 0]
+    limit: 500
+    column_limit: 50
+    total: true
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: cme-group-secondary
+      palette_id: cme-group-secondary-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    x_axis_zoom: true
+    y_axis_zoom: true
+    show_null_points: true
+    interpolation: linear
+    defaults_version: 1
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    hidden_fields: []
+    hidden_pivots: {}
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 27
+    col: 14
+    width: 10
+    height: 9
+  - title: Compute Engine CUD Coverage
+    name: Compute Engine CUD Coverage
+    model: gcp_billing
+    explore: gcp_billing_export
+    type: looker_column
+    fields: [gcp_billing_export.usage_start_month, gcp_billing_export__credits.total_promotional_credit,
+      gcp_billing_export__credits.total_committed_use_discount, gcp_billing_export.total_cost]
+    fill_fields: [gcp_billing_export.usage_start_month]
+    filters:
+      gcp_billing_export.cud_eligible: 'Yes'
+      gcp_billing_export.service__description: Compute Engine
+      gcp_billing_export.usage_start_month: 12 months
+    sorts: [gcp_billing_export.usage_start_month desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - category: table_calculation
+      expression: "${gcp_billing_export.total_cost}-${gcp_billing_export__credits.total_promotional_credit}"
+      label: Total Cost After Promo Discounts
+      value_format:
+      value_format_name: usd_0
+      _kind_hint: measure
+      table_calculation: total_cost_after_promo_discounts
+      _type_hint: number
+    - category: table_calculation
+      expression: "${gcp_billing_export__credits.total_committed_use_discount}/${total_cost_after_promo_discounts}"
+      label: CUD Coverage
+      value_format:
+      value_format_name: percent_1
+      _kind_hint: measure
+      table_calculation: cud_coverage
+      _type_hint: number
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: cme-group-secondary
+      palette_id: cme-group-secondary-categorical-0
+      options:
+        steps: 5
+    x_axis_zoom: true
+    y_axis_zoom: true
+    show_dropoff: false
+    hidden_pivots: {}
+    show_null_points: true
+    interpolation: linear
+    defaults_version: 1
+    hidden_fields: [gcp_billing_export__credits.total_promotional_credit, gcp_billing_export__credits.total_committed_use_discount,
+      gcp_billing_export.total_cost, total_cost_after_promo_discounts]
+    note_state: expanded
+    note_display: above
+    note_text: Calculation based on CUD eligible Compute Engine SKUs
+    listen:
+      Machine Type: gcp_billing_export.machine_type
+    row: 11
+    col: 0
+    width: 12
+    height: 8
+  filters:
+  - name: Machine Type
+    title: Machine Type
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: button_group
+      display: inline
+    model: gcp_billing
+    explore: gcp_billing_export
+    listens_to_filters: []
+    field: gcp_billing_export.machine_type
