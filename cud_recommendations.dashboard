@@ -1,0 +1,482 @@
+---
+- dashboard: cud_recommendations
+  title: CUD Recommendations
+  layout: newspaper
+  preferred_viewer: dashboards-next
+  description: ''
+  preferred_slug: BvG4OlGOpvq52VPY06lg4u
+  elements:
+  - title: Total VM Savings
+    name: Total VM Savings
+    model: gcp_billing
+    explore: recommendations_export
+    type: single_value
+    fields: [recommendations_export.total_savings]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: VM
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 0
+    col: 18
+    width: 6
+    height: 2
+  - name: VM Recommendations
+    type: text
+    title_text: VM Recommendations
+    body_text: 'Compute Engine provides idle recommendations to help you identify
+      virtual machine (VM) instances that have not been used or could benefit from
+      purchasing additional commitments. You can use idle VM recommendations to find
+      and stop idle VM instances to reduce waste of resources as well as use CUD recommender
+      to optimize commitments. [Checkout more information in our public documentation.](https://cloud.google.com/recommender/docs/recommenders) '
+    row: 0
+    col: 0
+    width: 12
+    height: 3
+  - name: Persistent Disk Recommendations
+    type: text
+    title_text: Persistent Disk Recommendations
+    body_text: Compute Engine provides recommendations to help you identify persistent
+      disks (PDs) that haven't been attached to any virtual machine (VM) instance.
+      You can use idle persistent disk recommendations to help minimize waste of resources
+      and reduce your compute bill. For PDs that are not actively used, create a backup
+      snapshot and delete the PD. [Checkout more information in our public documentation.](https://cloud.google.com/recommender/docs/recommenders)
+    row: 18
+    col: 3
+    width: 16
+    height: 3
+  - title: Total Savings
+    name: Total Savings
+    model: gcp_billing
+    explore: recommendations_export
+    type: single_value
+    fields: [recommendations_export.total_savings]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: Persistent Disk
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 18
+    col: 19
+    width: 5
+    height: 3
+  - title: VM Recommendations
+    name: VM Recommendations (2)
+    model: gcp_billing
+    explore: recommendations_export
+    type: looker_grid
+    fields: [tickets.assignee, tickets.created, tickets.key, tickets.status, recommendations_export.description,
+      recommendations_export.recommender_subtype, recommendations_export.total_savings,
+      recommendations_export.last_refresh_date, recommendations_export.ticket_id]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: VM
+    sorts: [recommendations_export.total_savings desc]
+    limit: 500
+    column_limit: 50
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    show_sql_query_menu_options: false
+    column_order: ["$$$_row_numbers_$$$", tickets.assignee, tickets.created, tickets.key,
+      tickets.status, recommendations_export.last_refresh_date, recommendations_export.description,
+      recommendations_export.recommender_subtype, recommendations_export.total_savings]
+    show_totals: true
+    show_row_totals: true
+    truncate_header: false
+    series_labels:
+      recommendations_export.last_refresh_date: Recommendations Refresh Date
+    series_cell_visualizations:
+      recommendations_export.total_savings:
+        is_active: true
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    y_axes: [{label: '', orientation: left, series: [{axisId: recommendations_export.total_savings,
+            id: recommendations_export.total_savings, name: Total Savings}], showLabels: false,
+        showValues: true, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: []
+    title_hidden: true
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 7
+    col: 0
+    width: 24
+    height: 9
+  - name: ''
+    type: text
+    title_text: ''
+    body_text: "<p></p>\n"
+    row: 16
+    col: 0
+    width: 24
+    height: 2
+  - title: PD Recommendations
+    name: PD Recommendations
+    model: gcp_billing
+    explore: recommendations_export
+    type: looker_grid
+    fields: [recommendations_export.last_refresh_date, recommendations_export.project_name,
+      recommendations_export.description, recommendations_export.location, recommendations_export.recommender_subtype,
+      recommendations_export.total_savings]
+    filters:
+      recommendations_export.category: Persistent Disk
+      recommendations_export.service: Compute Engine
+    sorts: [recommendations_export.project_name]
+    limit: 500
+    column_limit: 50
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    y_axes: [{label: '', orientation: left, series: [{axisId: recommendations_export.total_savings,
+            id: recommendations_export.total_savings, name: Total Savings}], showLabels: false,
+        showValues: true, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    defaults_version: 1
+    hidden_fields: []
+    title_hidden: true
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 21
+    col: 0
+    width: 16
+    height: 8
+  - title: PD Recommendations
+    name: PD Recommendations (2)
+    model: gcp_billing
+    explore: recommendations_export
+    type: looker_column
+    fields: [recommendations_export.project_name, recommendations_export.recommender_subtype,
+      recommendations_export.total_savings]
+    pivots: [recommendations_export.recommender_subtype]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: Persistent Disk
+    sorts: [recommendations_export.project_name, recommendations_export.recommender_subtype]
+    limit: 500
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: recommendations_export.total_savings,
+            id: recommendations_export.total_savings, name: Total Savings}], showLabels: false,
+        showValues: true, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: []
+    title_hidden: true
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 21
+    col: 16
+    width: 8
+    height: 8
+  - title: Recommendations Priorities
+    name: Recommendations Priorities
+    model: gcp_billing
+    explore: recommendations_export
+    type: looker_grid
+    fields: [recommendations_export.count, recommendations_export.priority]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: VM
+    sorts: [recommendations_export.count desc 0]
+    limit: 500
+    column_limit: 50
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    truncate_header: false
+    series_labels:
+      recommendations_export.count: Count
+    series_cell_visualizations:
+      recommendations_export.count:
+        is_active: true
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    hidden_pivots: {}
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 3
+    col: 6
+    width: 6
+    height: 4
+  - title: Total VM Recommendations
+    name: Total VM Recommendations
+    model: gcp_billing
+    explore: recommendations_export
+    type: single_value
+    fields: [recommendations_export.count]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: VM
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    hidden_pivots: {}
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 0
+    col: 12
+    width: 6
+    height: 2
+  - title: VM Recommendations by Region
+    name: VM Recommendations by Region
+    model: gcp_billing
+    explore: recommendations_export
+    type: looker_pie
+    fields: [recommendations_export.count, recommendations_export.location]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: VM
+    sorts: [recommendations_export.count desc 0]
+    limit: 500
+    column_limit: 50
+    value_labels: legend
+    label_type: labPer
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    hidden_pivots: {}
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 2
+    col: 12
+    width: 12
+    height: 5
+  - title: Number of Open Tickets
+    name: Number of Open Tickets
+    model: gcp_billing
+    explore: recommendations_export
+    type: single_value
+    fields: [count_of_key]
+    filters:
+      recommendations_export.service: Compute Engine
+      recommendations_export.category: VM
+      tickets.status: Open
+    limit: 500
+    column_limit: 50
+    dynamic_fields:
+    - measure: count_of_key
+      based_on: tickets.key
+      expression: ''
+      label: Count of Key
+      type: count_distinct
+      _kind_hint: measure
+      _type_hint: number
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    hidden_pivots: {}
+    value_labels: legend
+    label_type: labPer
+    listen:
+      Project ID: recommendations_export.cloud_entity_id
+    row: 3
+    col: 0
+    width: 6
+    height: 4
+  filters:
+  - name: Project ID
+    title: Project ID
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+      options: []
+    model: gcp_billing
+    explore: recommendations_export
+    listens_to_filters: []
+    field: recommendations_export.cloud_entity_id
